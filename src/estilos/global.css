@@ -6,10 +6,12 @@
   --cor-texto: #1f1f1f;
   --cor-texto-suave: #5c5c5c;
   --cor-fundo: #ffffff;
+  --cor-fundo-pagina: #f3f4f6;
   --cor-neutra: #eeeeee;
   --cor-neutra-forte: #d6d6d6;
   --raio: 12px;
   --gutter: 16px;
+  --largura-maxima: 1120px;
   color-scheme: light;
 }
 
@@ -26,7 +28,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--cor-fundo);
+  background: var(--cor-fundo-pagina);
   color: var(--cor-texto);
   font-family:
     system-ui,
@@ -79,62 +81,77 @@ img {
   cursor: pointer;
 }
 
-/* Cabeçalho */
+/* Cabeçalho: faixa na cor primária (já com contraste ≥ 4,5 contra branco) */
 .cabecalho {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px var(--gutter);
-  background: var(--cor-fundo);
-  border-bottom: 1px solid var(--cor-neutra);
+  gap: 14px;
+  padding: 20px max(var(--gutter), calc((100% - var(--largura-maxima)) / 2)) 28px;
+  background:
+    radial-gradient(circle at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%), var(--cor-primaria);
+  color: #ffffff;
+  border-radius: 0 0 24px 24px;
+}
+
+.cabecalho__marca {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  padding: 6px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.18);
 }
 
 .cabecalho__logo {
-  width: 48px;
-  height: 48px;
-  flex: none;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
 }
 
 .cabecalho__iniciais {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--cor-primaria);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 18px;
+  color: var(--cor-primaria);
+  font-weight: 800;
+  font-size: 22px;
 }
 
 .cabecalho__textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
 .cabecalho__nome {
-  color: var(--cor-primaria);
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
-.cabecalho__filial,
-.cabecalho__endereco {
-  color: var(--cor-texto);
-  font-size: 14px;
+.cabecalho__filial {
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .cabecalho__endereco {
-  color: var(--cor-texto-suave);
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
   font-size: 13px;
 }
 
+.cabecalho__endereco svg {
+  flex: none;
+  margin-top: 2px;
+}
+
 .conteudo {
-  padding-bottom: 24px;
+  max-width: var(--largura-maxima);
+  margin: 0 auto;
+  padding-bottom: 32px;
 }
 
 /* Página montada */
@@ -142,18 +159,46 @@ img {
   padding-top: 20px;
 }
 
-.categoria__nome {
+.categoria__topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
   padding-inline: var(--gutter);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.categoria__nome {
+  position: relative;
+  padding-left: 12px;
   color: var(--cor-primaria);
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.categoria__nome::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--cor-secundaria);
+}
+
+.categoria__total {
+  flex: none;
+  color: var(--cor-texto-suave);
+  font-size: 13px;
 }
 
 .categoria__produtos {
   display: flex;
   gap: 12px;
   margin: 0;
-  padding: 0 var(--gutter) 8px;
+  padding: 2px var(--gutter) 12px;
   list-style: none;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -168,10 +213,34 @@ img {
 }
 
 .cartao-produto {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  border: 1px solid var(--cor-neutra);
-  border-radius: var(--raio);
+  border-radius: 16px;
+  background: var(--cor-fundo);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.06),
+    0 4px 12px rgb(0 0 0 / 0.06);
   overflow: hidden;
+}
+
+.cartao-produto__midia {
+  position: relative;
+  background: var(--cor-fundo);
+}
+
+.cartao-produto__selo {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--cor-secundaria);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
 .cartao-produto__foto,
@@ -191,9 +260,10 @@ img {
 
 .cartao-produto__corpo {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 10px 10px;
+  gap: 4px;
+  padding: 10px 12px 12px;
   font-size: 13px;
   color: var(--cor-secundaria);
 }
@@ -201,22 +271,32 @@ img {
 .cartao-produto__nome {
   color: var(--cor-primaria);
   font-size: 15px;
+  font-weight: 700;
   line-height: 1.25;
 }
 
+.cartao-produto__quantidade {
+  color: var(--cor-texto-suave);
+  font-size: 12px;
+}
+
 .cartao-produto__precos {
-  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
 }
 
 .cartao-produto__preco-original {
-  color: var(--cor-secundaria);
+  color: var(--cor-texto-suave);
   font-size: 13px;
 }
 
 .cartao-produto__preco {
   color: var(--cor-primaria);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .cartao-produto__descricao {
@@ -227,14 +307,33 @@ img {
   overflow: hidden;
 }
 
+.cartao-produto__observacao,
 .cartao-produto__validade {
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 6px;
   font-size: 12px;
+  font-weight: 600;
+}
+
+.cartao-produto__observacao {
+  border: 1px solid currentColor;
+}
+
+.cartao-produto__validade {
+  margin-top: auto;
+  background: var(--cor-neutra);
+  color: var(--cor-texto);
 }
 
 .sem-ofertas {
-  padding: 32px var(--gutter);
+  margin: 24px var(--gutter);
+  padding: 40px var(--gutter);
+  border-radius: 16px;
+  background: var(--cor-fundo);
   text-align: center;
   color: var(--cor-texto);
+  font-weight: 600;
 }
 
 /* Panfleto */
@@ -242,12 +341,24 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 12px 0 0;
+  gap: 12px;
+  max-width: 720px;
+  margin: 16px auto 0;
+  padding-inline: var(--gutter);
 }
 
 .panfleto > * {
   width: 100%;
+}
+
+.panfleto__imagem,
+.panfleto__area {
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.06),
+    0 6px 20px rgb(0 0 0 / 0.1);
+  overflow: hidden;
+  background: var(--cor-fundo);
 }
 
 .panfleto__imagem {
@@ -267,15 +378,27 @@ img {
 }
 
 .panfleto__validade {
-  padding-inline: var(--gutter);
+  width: auto;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: var(--cor-fundo);
   color: var(--cor-secundaria);
   font-size: 14px;
+  font-weight: 700;
 }
 
 .panfleto__abrir {
-  padding: 8px var(--gutter);
-  color: var(--cor-primaria);
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-height: 44px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--cor-primaria);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .panfleto__falha {
@@ -284,6 +407,8 @@ img {
   align-items: center;
   gap: 12px;
   padding: 32px var(--gutter);
+  border-radius: 16px;
+  background: var(--cor-fundo);
   text-align: center;
 }
 
@@ -311,16 +436,17 @@ img {
 .esqueleto__cabecalho {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px var(--gutter);
-  border-bottom: 1px solid var(--cor-neutra);
+  gap: 14px;
+  padding: 20px var(--gutter) 28px;
+  border-radius: 0 0 24px 24px;
+  background: var(--cor-neutra);
 }
 
 .esqueleto__logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--cor-neutra);
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: var(--cor-neutra-forte);
 }
 
 .esqueleto__linhas {
@@ -334,7 +460,7 @@ img {
   width: 40%;
   height: 12px;
   border-radius: 6px;
-  background: var(--cor-neutra);
+  background: var(--cor-neutra-forte);
 }
 
 .esqueleto__linha--larga {
@@ -347,7 +473,7 @@ img {
 }
 
 .esqueleto__titulo {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .esqueleto__cartoes {
@@ -359,9 +485,9 @@ img {
 .esqueleto__cartao {
   flex: none;
   width: min(156px, 42vw);
-  height: 240px;
-  border-radius: var(--raio);
-  background: var(--cor-neutra);
+  height: 260px;
+  border-radius: 16px;
+  background: var(--cor-fundo);
 }
 
 .esqueleto--bloco {

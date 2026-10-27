@@ -1,9 +1,9 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { paginaEstrutura, paginaVazia, respostaJson } from '../../../test/fixtures';
-import type { PaginaPublica, ProdutoPublico } from '../../api/tipos';
+import type { CategoriaPublica, PaginaPublica, ProdutoPublico } from '../../api/tipos';
 import App from '../../App';
-import { CartaoProduto } from '../CartaoProduto';
+import { CartaoProduto, percentualDesconto } from '../CartaoProduto';
 import { PaginaMontada } from '../PaginaMontada';
 
 async function abrirPagina(pagina: PaginaPublica) {
@@ -92,6 +92,30 @@ describe('Funcionalidade: Página montada (RN29, RN30, RN31, RN32, RN41, RN45)',
     expect(screen.getByText('kg')).toHaveClass('cartao-produto__quantidade');
     expect(screen.getByText('Banana prata selecionada, direto do produtor.')).toBeInTheDocument();
     expect(screen.getByText('Limite 3 por cliente')).toBeInTheDocument();
+  });
+
+  it('Cenário: Dado preço original maior, então o selo mostra o desconto arredondado', () => {
+    const banana = paginaEstrutura().estrutura.categorias[0]?.produtos[0] as ProdutoPublico;
+    const { container } = render(<CartaoProduto produto={banana} />);
+    expect(container.querySelector('.cartao-produto__selo')).toHaveTextContent('-29%');
+  });
+
+  it('Cenário: Dado preço original ausente, igual ou menor, então sem desconto', () => {
+    expect(percentualDesconto(499)).toBeNull();
+    expect(percentualDesconto(499, 499)).toBeNull();
+    expect(percentualDesconto(499, 300)).toBeNull();
+    expect(percentualDesconto(1000, 1001)).toBeNull();
+    const { container } = render(<CartaoProduto produto={produtoMinimo} />);
+    expect(container.querySelector('.cartao-produto__selo')).toBeNull();
+  });
+
+  it('Cenário: Dado categorias com 1 e com 3 produtos, então o total no singular/plural', () => {
+    const { estrutura } = paginaEstrutura();
+    const primeira = estrutura.categorias[0] as CategoriaPublica;
+    render(<PaginaMontada categorias={[{ nome: 'Única', produtos: [produtoMinimo] }]} />);
+    expect(screen.getByText('1 oferta')).toBeInTheDocument();
+    render(<PaginaMontada categorias={[primeira]} />);
+    expect(screen.getByText('3 ofertas')).toBeInTheDocument();
   });
 
   it('Cenário: Dado estrutura vazia, então "Nenhuma oferta no momento."', async () => {

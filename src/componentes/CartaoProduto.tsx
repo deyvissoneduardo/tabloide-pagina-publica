@@ -19,28 +19,43 @@ function IconeEtiqueta() {
   );
 }
 
+/** Desconto inteiro de "de/por" (RN32); null quando não há preço original maior. */
+export function percentualDesconto(promocional: number, original?: number): number | null {
+  if (original === undefined || original <= promocional) return null;
+  const percentual = Math.round((1 - promocional / original) * 100);
+  return percentual > 0 ? percentual : null;
+}
+
 export function CartaoProduto({ produto, prioritario = false }: Props) {
   const preco = formatarDinheiro(produto.precoPromocionalCentavos);
   const original =
     produto.precoOriginalCentavos === undefined ? null : formatarDinheiro(produto.precoOriginalCentavos);
+  const desconto = percentualDesconto(produto.precoPromocionalCentavos, produto.precoOriginalCentavos);
 
   return (
     <article className="cartao-produto">
-      {produto.fotoUrl ? (
-        <img
-          className="cartao-produto__foto"
-          src={produto.fotoUrl}
-          alt={`Foto de ${produto.nome}`}
-          width="156"
-          height="156"
-          loading={prioritario ? 'eager' : 'lazy'}
-          decoding="async"
-        />
-      ) : (
-        <div className="cartao-produto__sem-foto">
-          <IconeEtiqueta />
-        </div>
-      )}
+      <div className="cartao-produto__midia">
+        {desconto !== null && (
+          <span className="cartao-produto__selo" aria-hidden="true">
+            -{desconto}%
+          </span>
+        )}
+        {produto.fotoUrl ? (
+          <img
+            className="cartao-produto__foto"
+            src={produto.fotoUrl}
+            alt={`Foto de ${produto.nome}`}
+            width="156"
+            height="156"
+            loading={prioritario ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        ) : (
+          <div className="cartao-produto__sem-foto">
+            <IconeEtiqueta />
+          </div>
+        )}
+      </div>
       <div className="cartao-produto__corpo">
         <h3 className="cartao-produto__nome">{produto.nome}</h3>
         {produto.quantidade && <p className="cartao-produto__quantidade">{produto.quantidade}</p>}
