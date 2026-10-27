@@ -1,0 +1,19 @@
+{
+  "lojista": {
+    "nome": "Mercado Bom Preço",
+    "logoUrl": null,
+    "corPrimaria": "#FFD100",
+    "corSecundaria": null
+  },
+  "sePanfleto": true,
+  "filial": { "nome": "Centro", "endereco": null },
+  "panfleto": {
+    "tipo": "PDF",
+    "arquivoUrl": "https://projeto.supabase.co/storage/v1/object/public/midia/t1/panfleto/panfleto.pdf",
+    "largura": 595,
+    "altura": 842
+  },
+  "estrutura": { "categorias": [] },
+  "hoje": "2026-10-26",
+  "geradoEm": "2026-10-26T15:00:00.000Z"
+}

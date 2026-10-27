@@ -1,0 +1,83 @@
+{
+  "lojista": {
+    "nome": "Mercado Bom Preço",
+    "logoUrl": "https://projeto.supabase.co/storage/v1/object/public/midia/t1/logo/logo.webp",
+    "corPrimaria": "#C8102E",
+    "corSecundaria": "#FFD100"
+  },
+  "sePanfleto": false,
+  "filial": {
+    "nome": "Centro",
+    "endereco": {
+      "cep": "01310100",
+      "logradouro": "Avenida Paulista",
+      "numero": "1000",
+      "complemento": null,
+      "bairro": "Bela Vista",
+      "cidade": "São Paulo",
+      "uf": "SP"
+    }
+  },
+  "panfleto": null,
+  "estrutura": {
+    "categorias": [
+      {
+        "nome": "Hortifrúti",
+        "produtos": [
+          {
+            "nome": "Banana prata",
+            "quantidade": "kg",
+            "descricao": "Banana prata selecionada, direto do produtor.",
+            "observacao": "Limite 3 por cliente",
+            "precoPromocionalCentavos": 499,
+            "precoOriginalCentavos": 699,
+            "fotoUrl": "https://projeto.supabase.co/storage/v1/object/public/midia/t1/produto/banana.webp",
+            "validoAte": "2026-11-20"
+          },
+          {
+            "nome": "Tomate italiano",
+            "quantidade": "kg",
+            "precoPromocionalCentavos": 799,
+            "fotoUrl": "https://projeto.supabase.co/storage/v1/object/public/midia/t1/produto/tomate.webp"
+          },
+          {
+            "nome": "Alface crespa",
+            "quantidade": "unidade",
+            "precoPromocionalCentavos": 299
+          }
+        ]
+      },
+      {
+        "nome": "Bebidas",
+        "produtos": [
+          {
+            "nome": "Suco de uva integral",
+            "quantidade": "1 L",
+            "precoPromocionalCentavos": 1290,
+            "precoOriginalCentavos": 1590,
+            "validoAte": "2026-11-05"
+          },
+          {
+            "nome": "Água mineral",
+            "quantidade": "500 ml",
+            "precoPromocionalCentavos": 199
+          }
+        ]
+      },
+      {
+        "nome": "Açougue",
+        "produtos": [
+          {
+            "nome": "Picanha",
+            "quantidade": "kg",
+            "descricao": "Peça inteira ou fatiada.",
+            "precoPromocionalCentavos": 8990,
+            "precoOriginalCentavos": 10990
+          }
+        ]
+      }
+    ]
+  },
+  "hoje": "2026-10-26",
+  "geradoEm": "2026-10-26T15:00:00.000Z"
+}

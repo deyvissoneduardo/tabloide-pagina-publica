@@ -1,0 +1,20 @@
+{
+  "lojista": {
+    "nome": "Mercado Bom Preço",
+    "logoUrl": null,
+    "corPrimaria": null,
+    "corSecundaria": null
+  },
+  "sePanfleto": true,
+  "filial": { "nome": "Centro", "endereco": null },
+  "panfleto": {
+    "tipo": "IMAGEM",
+    "arquivoUrl": "https://projeto.supabase.co/storage/v1/object/public/midia/t1/panfleto/panfleto.webp",
+    "largura": 1600,
+    "altura": 2400,
+    "validoAte": "2026-11-20"
+  },
+  "estrutura": { "categorias": [] },
+  "hoje": "2026-10-26",
+  "geradoEm": "2026-10-26T15:00:00.000Z"
+}

@@ -1,0 +1,381 @@
+/* Cores de texto: --cor-primaria e --cor-secundaria vêm de aplicarTema (plano §4.7).
+   Os valores abaixo são os padrões já ajustados para contraste ≥ 4,5 sobre branco. */
+:root {
+  --cor-primaria: #1565c0;
+  --cor-secundaria: #996b00;
+  --cor-texto: #1f1f1f;
+  --cor-texto-suave: #5c5c5c;
+  --cor-fundo: #ffffff;
+  --cor-neutra: #eeeeee;
+  --cor-neutra-forte: #d6d6d6;
+  --raio: 12px;
+  --gutter: 16px;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.botao {
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cor-primaria);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Cabeçalho */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px var(--gutter);
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-neutra);
+}
+
+.cabecalho__logo {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  object-fit: contain;
+}
+
+.cabecalho__iniciais {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.cabecalho__textos {
+  min-width: 0;
+}
+
+.cabecalho__nome {
+  color: var(--cor-primaria);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.cabecalho__filial,
+.cabecalho__endereco {
+  color: var(--cor-texto);
+  font-size: 14px;
+}
+
+.cabecalho__endereco {
+  color: var(--cor-texto-suave);
+  font-size: 13px;
+}
+
+.conteudo {
+  padding-bottom: 24px;
+}
+
+/* Página montada */
+.categoria {
+  padding-top: 20px;
+}
+
+.categoria__nome {
+  padding-inline: var(--gutter);
+  margin-bottom: 8px;
+  color: var(--cor-primaria);
+  font-size: 18px;
+}
+
+.categoria__produtos {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 var(--gutter) 8px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  -webkit-overflow-scrolling: touch;
+}
+
+.categoria__item {
+  flex: none;
+  width: min(156px, 42vw);
+  scroll-snap-align: start;
+}
+
+.cartao-produto {
+  height: 100%;
+  border: 1px solid var(--cor-neutra);
+  border-radius: var(--raio);
+  overflow: hidden;
+}
+
+.cartao-produto__foto,
+.cartao-produto__sem-foto {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.cartao-produto__sem-foto {
+  display: grid;
+  place-items: center;
+  background: var(--cor-neutra);
+  color: var(--cor-texto-suave);
+}
+
+.cartao-produto__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px 10px;
+  font-size: 13px;
+  color: var(--cor-secundaria);
+}
+
+.cartao-produto__nome {
+  color: var(--cor-primaria);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.cartao-produto__precos {
+  margin-top: 2px;
+}
+
+.cartao-produto__preco-original {
+  color: var(--cor-secundaria);
+  font-size: 13px;
+}
+
+.cartao-produto__preco {
+  color: var(--cor-primaria);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cartao-produto__descricao {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cartao-produto__validade {
+  font-size: 12px;
+}
+
+.sem-ofertas {
+  padding: 32px var(--gutter);
+  text-align: center;
+  color: var(--cor-texto);
+}
+
+/* Panfleto */
+.panfleto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 0;
+}
+
+.panfleto > * {
+  width: 100%;
+}
+
+.panfleto__imagem {
+  width: 100%;
+  height: auto;
+}
+
+.panfleto__area {
+  position: relative;
+  width: 100%;
+}
+
+.panfleto__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.panfleto__validade {
+  padding-inline: var(--gutter);
+  color: var(--cor-secundaria);
+  font-size: 14px;
+}
+
+.panfleto__abrir {
+  padding: 8px var(--gutter);
+  color: var(--cor-primaria);
+  font-weight: 600;
+}
+
+.panfleto__falha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px var(--gutter);
+  text-align: center;
+}
+
+/* Avisos (não encontrada / sem conexão) */
+.aviso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 64px var(--gutter);
+  text-align: center;
+}
+
+.aviso__titulo {
+  font-size: 20px;
+}
+
+.aviso__texto {
+  color: var(--cor-texto-suave);
+}
+
+/* Esqueleto: estático, sem animação */
+.esqueleto__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px var(--gutter);
+  border-bottom: 1px solid var(--cor-neutra);
+}
+
+.esqueleto__logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cor-neutra);
+}
+
+.esqueleto__linhas {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.esqueleto__linha {
+  width: 40%;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--cor-neutra);
+}
+
+.esqueleto__linha--larga {
+  width: 60%;
+  height: 18px;
+}
+
+.esqueleto__faixa {
+  padding: 20px var(--gutter) 0;
+}
+
+.esqueleto__titulo {
+  margin-bottom: 8px;
+}
+
+.esqueleto__cartoes {
+  display: flex;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.esqueleto__cartao {
+  flex: none;
+  width: min(156px, 42vw);
+  height: 240px;
+  border-radius: var(--raio);
+  background: var(--cor-neutra);
+}
+
+.esqueleto--bloco {
+  position: absolute;
+  inset: 0;
+  background: var(--cor-neutra);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
