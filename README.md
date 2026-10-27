@@ -2,6 +2,8 @@
 
 Página que o consumidor abre ao ler o QR Code da filial: `https://<dominio>/f/<codigo>`. Mostra a identidade do lojista (logo, nome, cores) e, conforme a resposta da API, **só o panfleto** (imagem ou PDF de 1 página) ou **a página montada** (categorias na vertical, produtos em carrossel horizontal, na ordem definida pelo lojista).
 
+> ⚠️ Adicionar screenshot da página montada e do panfleto em `docs/demo.png` (e referenciar aqui).
+
 SPA estática (Vite + React + TypeScript), sem SSR, sem login, sem cookies e sem analytics. Plano completo em `../plano_pagina_publica/` (`plano.md` §4 é o contrato; `react.md` são as tarefas deste projeto).
 
 ## Como rodar
@@ -69,3 +71,20 @@ Fixtures do contrato em `test/fixtures/` (página montada, panfleto imagem, panf
 7. Abrir as 3 filiais de teste (página montada, panfleto imagem, panfleto PDF) no celular.
 
 `vercel.json` reescreve `/f/:codigo` (e qualquer outro caminho fora de `/assets/`) para o `index.html`, aplica cache de 1 ano nos arquivos de `/assets/` (nomes com hash) e os cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, CSP). O `index.html` fica sem cache longo (padrão da Vercel).
+
+## Contribuindo
+
+Antes de abrir um PR, rode a mesma sequência que valida o projeto:
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:cov
+npm run build
+```
+
+O `build` falha se o orçamento do bundle for estourado e o `test:cov` falha abaixo de 90% de cobertura.
+
+## Licença
+
+Software proprietário, de uso interno. Todos os direitos reservados.
