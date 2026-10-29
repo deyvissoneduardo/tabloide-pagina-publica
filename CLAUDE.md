@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 ## Visão do Projeto
-Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre `/f/<codigo>` e vê o panfleto (imagem/PDF) ou a página montada do lojista. Otimiza carregamento no celular (orçamento de bundle) e privacidade. Contrato da API: `../plano_pagina_publica/plano.md` §4 (fora deste repo).
+Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre `/f/<codigo>` e vê o panfleto (imagem/PDF) ou a página montada do lojista. Otimiza carregamento no celular (orçamento de bundle) e privacidade. Contrato da API: `../plano_pagina_publica/plano.md` §4 + `../docs/plano_pagina_publica_melhorias/plano.md` §4 (`aparencia`; fora deste repo).
 
 ## Stack
 - React 18.3.1 + TypeScript 6 (`strict`, `noUncheckedIndexedAccess`) + Vite 8; SPA estática, sem SSR. Node ≥ 22 (`.nvmrc`), npm (`package-lock.json`).
@@ -24,7 +24,8 @@ Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre
 ## Convenções
 - Identificadores, comentários e textos em pt-BR (`buscarPagina`, `aoTentarDeNovo`).
 - Named exports. Exceções: `App.tsx` e componentes carregados com `lazy()` (hoje `PanfletoPdf.tsx`).
-- NÃO reordenar, filtrar nem reaplicar a regra `sePanfleto` no cliente: a ordem de categorias/produtos é a do JSON e a exibição decide só por `panfleto != null`.
+- NÃO reordenar, filtrar nem reaplicar a regra `sePanfleto` no cliente: a ordem de categorias/produtos é a do JSON e a exibição decide só por `panfleto != null`; o topo decide só por `aparencia.banner != null` (banner × cabeçalho).
+- A filial (nome/endereço) NÃO aparece no corpo da página (U9); `filial.nome` só no `document.title`.
 - NÃO importar `pdfjs-dist` fora do chunk lazy de `PanfletoPdf`; o build falha se ele entrar no bundle inicial.
 - NÃO usar analytics, cookies, `localStorage`/`sessionStorage`, nem colocar segredo em `VITE_*` (vai embutido no bundle).
 - `fetch` só em `src/api/`; estados de erro seguem `ResultadoPagina` (`nao-encontrada` só para 404; o resto é `sem-conexao`).
@@ -32,7 +33,8 @@ Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre
 ## Onde coisas novas vão
 - Componentes: `src/componentes/PascalCase.tsx`. Demais módulos: kebab-case (`src/hooks/use-*.ts`, `src/formatacao/`, `src/tema/`).
 - Tipos do contrato da API: `src/api/tipos.ts`. Estilos: `src/estilos/global.css`, classes BEM (`bloco__elemento`).
-- Cores do lojista só via `--cor-primaria`/`--cor-secundaria` (definidas por `aplicarTema`); NÃO hardcodar cor de marca.
+- Cores do lojista só via as 10 variáveis de `aplicarTema(aparencia.cores)`: `--cor-primaria`, `--cor-secundaria`, `--cor-texto`, `--cor-texto-suave`, `--cor-fundo` (fundoCartao), `--cor-fundo-pagina`, `--cor-neutra`, `--cor-sobre-cor`, `--cor-fundo-banner`, `--cor-categoria`. Cor **exata** como veio da API (sem ajuste de contraste; `corDeTexto` foi removido). NÃO hardcodar cor (nem `#fff`); o mapeamento elemento → variável segue a tabela §4.4 e é conferido em `src/estilos/__tests__/global.test.ts`.
+- Medidas e tipografia espelham a prévia Flutter (`front/packages/core/lib/src/widgets/app_previa_*.dart`); mudou lá → porte aqui.
 - Prefira editar um componente/estado existente (`SemConexao`, `Esqueleto`…) a criar um quase-duplicado.
 
 ## Testing & Quality Bar
@@ -42,7 +44,6 @@ Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre
 
 ## Safe-Change Rules
 - NÃO mudar a rota `/f/:codigo` nem `CODIGO_PUBLICO_REGEX` (`src/rota.ts`): espelham a API e os QR Codes impressos.
-- `src/tema/cores.ts` é idêntico ao algoritmo do app Flutter; mudança só com confirmação.
 - `vercel.json` (rewrites, cache, CSP) e o orçamento em `scripts/verificar-bundle.mjs`: confirme antes de alterar.
 
 <!-- Itere este arquivo: erro que estava neste contrato → fortaleça a regra existente;

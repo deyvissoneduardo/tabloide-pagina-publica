@@ -27,7 +27,7 @@ describe('Funcionalidade: Página montada (RN29, RN30, RN31, RN32, RN41, RN45)',
 
   it('Cenário: Dado produtos numa ordem não alfabética no JSON, então a ordem do JSON é mantida', () => {
     const { estrutura } = paginaEstrutura();
-    render(<PaginaMontada categorias={estrutura.categorias} />);
+    render(<PaginaMontada categorias={estrutura.categorias} exibirNomeCategoria />);
     const lista = screen.getByRole('list', { name: 'Produtos de Hortifrúti' });
     const nomes = within(lista)
       .getAllByRole('heading', { level: 3 })
@@ -65,7 +65,7 @@ describe('Funcionalidade: Página montada (RN29, RN30, RN31, RN32, RN41, RN45)',
 
   it('Cenário: Dado a 1ª categoria, então só as 2 primeiras fotos carregam sem lazy', () => {
     const { estrutura } = paginaEstrutura();
-    render(<PaginaMontada categorias={estrutura.categorias} />);
+    render(<PaginaMontada categorias={estrutura.categorias} exibirNomeCategoria />);
     expect(screen.getByRole('img', { name: 'Foto de Banana prata' })).toHaveAttribute('loading', 'eager');
     expect(screen.getByRole('img', { name: 'Foto de Tomate italiano' })).toHaveAttribute('loading', 'eager');
   });
@@ -112,9 +112,9 @@ describe('Funcionalidade: Página montada (RN29, RN30, RN31, RN32, RN41, RN45)',
   it('Cenário: Dado categorias com 1 e com 3 produtos, então o total no singular/plural', () => {
     const { estrutura } = paginaEstrutura();
     const primeira = estrutura.categorias[0] as CategoriaPublica;
-    render(<PaginaMontada categorias={[{ nome: 'Única', produtos: [produtoMinimo] }]} />);
+    render(<PaginaMontada categorias={[{ nome: 'Única', produtos: [produtoMinimo] }]} exibirNomeCategoria />);
     expect(screen.getByText('1 oferta')).toBeInTheDocument();
-    render(<PaginaMontada categorias={[primeira]} />);
+    render(<PaginaMontada categorias={[primeira]} exibirNomeCategoria />);
     expect(screen.getByText('3 ofertas')).toBeInTheDocument();
   });
 
@@ -124,13 +124,19 @@ describe('Funcionalidade: Página montada (RN29, RN30, RN31, RN32, RN41, RN45)',
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
 
-  it('Cenário: Dado corPrimaria #FFD100, então o nome do produto usa var(--cor-primaria) = #8A7100', async () => {
+  it('Cenário: Dado primária #FFD100, então --cor-primaria é #FFD100 exato (U13)', async () => {
     const pagina = paginaEstrutura();
-    pagina.lojista.corPrimaria = '#FFD100';
+    pagina.aparencia.cores.primaria = '#FFD100';
     await abrirPagina(pagina);
-    expect(document.documentElement.style.getPropertyValue('--cor-primaria')).toBe('#8A7100');
+    expect(document.documentElement.style.getPropertyValue('--cor-primaria')).toBe('#FFD100');
     expect(screen.getByRole('heading', { level: 3, name: 'Banana prata' })).toHaveClass(
       'cartao-produto__nome',
     );
+  });
+
+  it('Cenário: Dado exibirNomeCategoria true, então o nome da categoria tem a classe que usa --cor-categoria', () => {
+    const { estrutura } = paginaEstrutura();
+    render(<PaginaMontada categorias={estrutura.categorias} exibirNomeCategoria />);
+    expect(screen.getByRole('heading', { level: 2, name: 'Hortifrúti' })).toHaveClass('categoria__nome');
   });
 });
