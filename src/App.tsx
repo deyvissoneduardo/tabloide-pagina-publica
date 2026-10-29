@@ -1,6 +1,7 @@
 import { lazy, Suspense, useLayoutEffect } from 'react';
 import type { PaginaPublica } from './api/tipos';
 import { AreaPanfleto } from './componentes/AreaPanfleto';
+import { Banner } from './componentes/Banner';
 import { Cabecalho } from './componentes/Cabecalho';
 import { Esqueleto } from './componentes/Esqueleto';
 import { NaoEncontrada } from './componentes/NaoEncontrada';
@@ -15,21 +16,29 @@ import { aplicarTema } from './tema/aplicar-tema';
 const PanfletoPdf = lazy(() => import('./componentes/PanfletoPdf'));
 
 function Pagina({ pagina }: { pagina: PaginaPublica }) {
-  const { lojista, filial, panfleto } = pagina;
+  const { lojista, filial, panfleto, aparencia } = pagina;
 
   // Antes da pintura: as cores do lojista já aparecem no primeiro quadro.
   useLayoutEffect(() => {
-    aplicarTema(lojista);
+    aplicarTema(aparencia.cores);
     document.title = `${lojista.nome} — ${filial.nome}`;
-  }, [lojista, filial.nome]);
+  }, [aparencia.cores, lojista.nome, filial.nome]);
 
   return (
     <>
-      <Cabecalho lojista={lojista} filial={filial} />
+      {/* A API já decidiu o banner (T2: null se desligado ou com panfleto); o cliente só o mostra. */}
+      {aparencia.banner ? (
+        <Banner banner={aparencia.banner} nomeLojista={lojista.nome} />
+      ) : (
+        <Cabecalho lojista={lojista} />
+      )}
       <main className="conteudo">
         {/* A API já aplicou a regra de exibição (plano §4.8, T2): decide só por panfleto != null. */}
         {panfleto === null ? (
-          <PaginaMontada categorias={pagina.estrutura.categorias} />
+          <PaginaMontada
+            categorias={pagina.estrutura.categorias}
+            exibirNomeCategoria={aparencia.exibirNomeCategoria}
+          />
         ) : panfleto.tipo === 'PDF' ? (
           <Suspense
             fallback={

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { paginaEstrutura, respostaJson } from '../../../test/fixtures';
+import { paginaBannerFoto, paginaEstrutura, respostaJson } from '../../../test/fixtures';
 import { buscarPagina, ehPaginaPublica, TEMPO_LIMITE_MS } from '../buscar-pagina';
 
 describe('Funcionalidade: Busca da página pública', () => {
@@ -61,6 +61,12 @@ describe('Funcionalidade: Busca da página pública', () => {
     await expect(buscarPagina('k7Qm2xPa')).resolves.toEqual({ tipo: 'sem-conexao' });
   });
 
+  it('Cenário: Dado JSON sem aparencia (API antiga), então sem-conexao', async () => {
+    const { aparencia: _aparencia, ...semAparencia } = paginaEstrutura();
+    fetchFalso.mockResolvedValue(respostaJson(semAparencia));
+    await expect(buscarPagina('k7Qm2xPa')).resolves.toEqual({ tipo: 'sem-conexao' });
+  });
+
   it('Cenário: Dado corpo que não é JSON, então sem-conexao', async () => {
     fetchFalso.mockResolvedValue(new Response('<html>', { status: 200 }));
     await expect(buscarPagina('k7Qm2xPa')).resolves.toEqual({ tipo: 'sem-conexao' });
@@ -90,6 +96,10 @@ describe('Funcionalidade: Validação mínima do JSON', () => {
     expect(ehPaginaPublica(paginaEstrutura())).toBe(true);
   });
 
+  it('Cenário: Dado banner com foto, então é página pública', () => {
+    expect(ehPaginaPublica(paginaBannerFoto())).toBe(true);
+  });
+
   it.each([
     ['nulo', null],
     ['array', []],
@@ -98,6 +108,13 @@ describe('Funcionalidade: Validação mínima do JSON', () => {
     ['categorias não array', { ...paginaEstrutura(), estrutura: { categorias: {} } }],
     ['panfleto texto', { ...paginaEstrutura(), panfleto: 'x' }],
     ['formato antigo (categorias na raiz)', { ...paginaEstrutura(), estrutura: undefined, categorias: [] }],
+    ['aparencia ausente (API antiga)', { ...paginaEstrutura(), aparencia: undefined }],
+    ['aparencia sem cores', { ...paginaEstrutura(), aparencia: { exibirNomeCategoria: true, banner: null } }],
+    [
+      'exibirNomeCategoria texto',
+      { ...paginaEstrutura(), aparencia: { ...paginaEstrutura().aparencia, exibirNomeCategoria: 'sim' } },
+    ],
+    ['banner texto', { ...paginaEstrutura(), aparencia: { ...paginaEstrutura().aparencia, banner: 'x' } }],
   ])('Cenário: Dado %s, então não é página pública', (_nome, dados) => {
     expect(ehPaginaPublica(dados)).toBe(false);
   });

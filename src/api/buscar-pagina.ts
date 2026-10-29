@@ -11,14 +11,18 @@ const ehObjeto = (valor: unknown): valor is Record<string, unknown> =>
 /** Validação mínima do formato (sem biblioteca de schema). */
 export function ehPaginaPublica(dados: unknown): dados is PaginaPublica {
   if (!ehObjeto(dados)) return false;
-  const { lojista, sePanfleto, estrutura, panfleto } = dados;
+  const { lojista, sePanfleto, estrutura, panfleto, aparencia } = dados;
   return (
     ehObjeto(lojista) &&
     typeof lojista.nome === 'string' &&
     typeof sePanfleto === 'boolean' &&
     ehObjeto(estrutura) &&
     Array.isArray(estrutura.categorias) &&
-    (panfleto === null || ehObjeto(panfleto))
+    (panfleto === null || ehObjeto(panfleto)) &&
+    ehObjeto(aparencia) &&
+    ehObjeto(aparencia.cores) &&
+    typeof aparencia.exibirNomeCategoria === 'boolean' &&
+    (aparencia.banner === null || ehObjeto(aparencia.banner))
   );
 }
 

@@ -1,13 +1,19 @@
-/* Cores de texto: --cor-primaria e --cor-secundaria vêm de aplicarTema (plano §4.7).
-   Os valores abaixo são os padrões já ajustados para contraste ≥ 4,5 sobre branco. */
+/* As 10 cores da página vêm de aplicarTema(aparencia.cores), exatas (plano_pagina_publica_melhorias §4.4).
+   Os valores abaixo são os padrões do §4.4: fallback do primeiro quadro e do esqueleto.
+   Medidas e tipografia portadas da prévia Flutter (AppPrevia*, textTheme Material 3). */
 :root {
   --cor-primaria: #1565c0;
   --cor-secundaria: #996b00;
   --cor-texto: #1f1f1f;
   --cor-texto-suave: #5c5c5c;
+  /* fundoCartao */
   --cor-fundo: #ffffff;
   --cor-fundo-pagina: #f3f4f6;
   --cor-neutra: #eeeeee;
+  --cor-sobre-cor: #ffffff;
+  --cor-fundo-banner: #1565c0;
+  --cor-categoria: #1565c0;
+  /* Fixa: só o esqueleto */
   --cor-neutra-forte: #d6d6d6;
   --raio: 12px;
   --gutter: 16px;
@@ -75,86 +81,111 @@ img {
   border: 0;
   border-radius: 999px;
   background: var(--cor-primaria);
-  color: #ffffff;
+  color: var(--cor-sobre-cor);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
 }
 
-/* Cabeçalho: faixa na cor primária (já com contraste ≥ 4,5 contra branco) */
-.cabecalho {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+/* Cabeçalho e banner: mesmo container (AppPreviaCabecalho; padding L16 T20 R16 B28, raio inferior 24).
+   Brilho: RadialGradient(topRight, radius 1.1 × lado menor) = 1.1 × 112 px de altura do cabeçalho. */
+.cabecalho,
+.banner {
   padding: 20px max(var(--gutter), calc((100% - var(--largura-maxima)) / 2)) 28px;
-  background:
-    radial-gradient(circle at 100% 0%, rgb(255 255 255 / 0.12), transparent 55%), var(--cor-primaria);
-  color: #ffffff;
+  color: var(--cor-sobre-cor);
   border-radius: 0 0 24px 24px;
 }
 
-.cabecalho__marca {
+.cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background:
+    radial-gradient(circle 123px at 100% 0%, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0)),
+    var(--cor-primaria);
+}
+
+.cabecalho__marca,
+.banner__marca {
   display: grid;
   place-items: center;
   width: 64px;
   height: 64px;
   flex: none;
-  padding: 6px;
+  padding: 4px;
   border-radius: 16px;
-  background: #ffffff;
+  background: var(--cor-sobre-cor);
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.18);
+  overflow: hidden;
 }
 
-.cabecalho__logo {
-  width: 52px;
-  height: 52px;
+.cabecalho__logo,
+.banner__logo {
+  width: 56px;
+  height: 56px;
   object-fit: contain;
 }
 
+/* titleLarge (22/28) w800 */
 .cabecalho__iniciais {
   color: var(--cor-primaria);
-  font-weight: 800;
   font-size: 22px;
+  font-weight: 800;
+  line-height: 28px;
 }
 
-.cabecalho__textos {
+.cabecalho__nome,
+.banner__nome {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-width: 0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 28px;
+}
+
+.banner {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  gap: 16px;
+  background:
+    radial-gradient(circle 123px at 100% 0%, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0)),
+    var(--cor-fundo-banner);
 }
 
-.cabecalho__nome {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-
-.cabecalho__filial {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.cabecalho__endereco {
+.banner__topo {
   display: flex;
-  align-items: flex-start;
-  gap: 4px;
-  font-size: 13px;
+  align-items: center;
+  gap: 16px;
 }
 
-.cabecalho__endereco svg {
-  flex: none;
-  margin-top: 2px;
+.banner__foto {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* bodyMedium (14/20, 0,25) */
+.banner__descricao {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 .conteudo {
   max-width: var(--largura-maxima);
   margin: 0 auto;
-  padding-bottom: 32px;
+  padding-bottom: 24px;
 }
 
-/* Página montada */
+/* Página montada (AppPreviaCategoria) */
 .categoria {
   padding-top: 20px;
 }
@@ -163,42 +194,37 @@ img {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   padding-inline: var(--gutter);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
+/* titleLarge (22/28) w800; barra de 4 px + 8 px de recuo */
 .categoria__nome {
-  position: relative;
-  padding-left: 12px;
-  color: var(--cor-primaria);
-  font-size: 20px;
+  flex: 1;
+  min-width: 0;
+  padding-left: 8px;
+  border-left: 4px solid var(--cor-secundaria);
+  color: var(--cor-categoria);
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  line-height: 28px;
 }
 
-.categoria__nome::before {
-  content: '';
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  left: 0;
-  width: 4px;
-  border-radius: 2px;
-  background: var(--cor-secundaria);
-}
-
+/* bodySmall (12/16, 0,4) */
 .categoria__total {
   flex: none;
   color: var(--cor-texto-suave);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
 }
 
 .categoria__produtos {
   display: flex;
   gap: 12px;
   margin: 0;
-  padding: 2px var(--gutter) 12px;
+  padding: 4px var(--gutter) 16px;
   list-style: none;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -208,8 +234,28 @@ img {
 
 .categoria__item {
   flex: none;
-  width: min(156px, 42vw);
+  width: 156px;
   scroll-snap-align: start;
+}
+
+/* Grade única sem nome de categoria (RN47): 2 colunas até 420 px (largura da prévia) */
+.grade-produtos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 20px var(--gutter) 16px;
+  list-style: none;
+}
+
+@media (min-width: 421px) {
+  .grade-produtos {
+    grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+  }
+}
+
+.grade-produtos__item {
+  min-width: 0;
 }
 
 .cartao-produto {
@@ -234,13 +280,15 @@ img {
   top: 8px;
   left: 8px;
   z-index: 1;
-  padding: 3px 8px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: var(--cor-secundaria);
-  color: #ffffff;
-  font-size: 13px;
+  color: var(--cor-sobre-cor);
+  /* labelMedium (12/16, 0,5) w800 */
+  font-size: 12px;
   font-weight: 800;
-  line-height: 1.3;
+  line-height: 16px;
+  letter-spacing: 0.5px;
 }
 
 .cartao-produto__foto,
@@ -262,41 +310,54 @@ img {
   display: flex;
   flex: 1;
   flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
-  padding: 10px 12px 12px;
-  font-size: 13px;
+  padding: 8px 12px 12px;
   color: var(--cor-secundaria);
+  /* bodySmall (12/16, 0,4) */
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
 }
 
+/* titleSmall (14/20, 0,1) w700, até 2 linhas */
 .cartao-produto__nome {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   color: var(--cor-primaria);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 20px;
+  letter-spacing: 0.1px;
 }
 
+/* labelSmall (11/16, 0,5) w500 */
 .cartao-produto__quantidade {
   color: var(--cor-texto-suave);
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .cartao-produto__precos {
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
 }
 
 .cartao-produto__preco-original {
   color: var(--cor-texto-suave);
-  font-size: 13px;
 }
 
+/* titleLarge (22/28) w800 */
 .cartao-produto__preco {
   color: var(--cor-primaria);
   font-size: 22px;
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 28px;
+  letter-spacing: 0;
 }
 
 .cartao-produto__descricao {
@@ -307,13 +368,14 @@ img {
   overflow: hidden;
 }
 
+/* labelSmall (11/16, 0,5) w600, raio 8 */
 .cartao-produto__observacao,
 .cartao-produto__validade {
-  align-self: flex-start;
   padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: 8px;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .cartao-produto__observacao {
@@ -321,7 +383,6 @@ img {
 }
 
 .cartao-produto__validade {
-  margin-top: auto;
   background: var(--cor-neutra);
   color: var(--cor-texto);
 }
@@ -333,7 +394,10 @@ img {
   background: var(--cor-fundo);
   text-align: center;
   color: var(--cor-texto);
+  /* bodyLarge (16/24, 0,5) w600 */
   font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
 }
 
 /* Panfleto */
@@ -379,12 +443,15 @@ img {
 
 .panfleto__validade {
   width: auto;
-  padding: 4px 14px;
+  padding: 4px 16px;
   border-radius: 999px;
   background: var(--cor-fundo);
   color: var(--cor-secundaria);
+  /* bodyMedium (14/20, 0,25) w700 */
   font-size: 14px;
   font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.25px;
 }
 
 .panfleto__abrir {
@@ -392,12 +459,16 @@ img {
   align-items: center;
   justify-content: center;
   width: auto;
-  min-height: 44px;
-  padding: 10px 24px;
+  /* FilledButton do tema: alvo 48, padding h24, labelLarge (14/20, 0,1) w600 */
+  min-height: 48px;
+  padding: 0 24px;
   border-radius: 999px;
   background: var(--cor-primaria);
-  color: #ffffff;
-  font-weight: 700;
+  color: var(--cor-sobre-cor);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.1px;
   text-decoration: none;
 }
 

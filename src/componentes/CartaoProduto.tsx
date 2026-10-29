@@ -10,7 +10,7 @@ interface Props {
 
 function IconeEtiqueta() {
   return (
-    <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 24 24" width="48" height="48" aria-hidden="true" focusable="false">
       <path
         fill="currentColor"
         d="M21.41 11.58l-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .55.22 1.05.59 1.42l9 9a2 2 0 0 0 2.82 0l7-7a2 2 0 0 0 0-2.84zM6.5 8A1.5 1.5 0 1 1 6.5 5a1.5 1.5 0 0 1 0 3z"

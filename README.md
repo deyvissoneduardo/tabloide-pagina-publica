@@ -1,10 +1,10 @@
 # Tabloide Digital — página pública
 
-Página que o consumidor abre ao ler o QR Code da filial: `https://<dominio>/f/<codigo>`. Mostra a identidade do lojista (logo, nome, cores) e, conforme a resposta da API, **só o panfleto** (imagem ou PDF de 1 página) ou **a página montada** (categorias na vertical, produtos em carrossel horizontal, na ordem definida pelo lojista).
+Página que o consumidor abre ao ler o QR Code da filial: `https://<dominio>/f/<codigo>`. Mostra no topo o **cabeçalho** (logo + nome fantasia) ou o **banner** do lojista e, conforme a resposta da API, **só o panfleto** (imagem ou PDF de 1 página) ou **a página montada** (categorias na vertical com produtos em carrossel horizontal, ou uma grade única quando o nome da categoria está desligado; sempre na ordem definida pelo lojista). Replica a prévia do painel Flutter.
 
 > ⚠️ Adicionar screenshot da página montada e do panfleto em `docs/demo.png` (e referenciar aqui).
 
-SPA estática (Vite + React + TypeScript), sem SSR, sem login, sem cookies e sem analytics. Plano completo em `../plano_pagina_publica/` (`plano.md` §4 é o contrato; `react.md` são as tarefas deste projeto).
+SPA estática (Vite + React + TypeScript), sem SSR, sem login, sem cookies e sem analytics. Plano completo em `../plano_pagina_publica/` (`plano.md` §4 é o contrato; `react.md` são as tarefas deste projeto) e, para banner, grade e cores, em `../docs/plano_pagina_publica_melhorias/` (`plano.md` §4.4–4.6).
 
 ## Como rodar
 
@@ -44,8 +44,12 @@ As variáveis são embutidas no build (são públicas: não coloque segredo aqui
 
 - **Rota:** só `/f/:codigo` (`src/rota.ts`, mesmo regex da API). Qualquer outro caminho mostra "Página não encontrada" sem chamar a API.
 - **Estados:** carregando (esqueleto), `404` → "Página não encontrada" (inexistente e lojista não ativo respondem igual, RN35), `429`/`5xx`/rede/timeout de 10 s/JSON fora do formato → "Não foi possível carregar as ofertas" com "Tentar de novo".
-- **Exibição:** decide só por `panfleto != null`; a API já aplicou a regra `sePanfleto` (plano §4.8). A ordem de categorias e produtos é a do JSON (o cliente nunca reordena).
-- **Cores:** `src/tema/cores.ts` implementa o algoritmo do plano §4.7 (idêntico ao do Flutter); nome e preço na primária, o resto na secundária.
+- **Exibição:** decide só por `panfleto != null`; a API já aplicou a regra `sePanfleto` (plano §4.8). A ordem de categorias e produtos é a do JSON (o cliente nunca reordena). A filial não aparece na página (só no título da aba).
+- **Aparência (`aparencia` na resposta):**
+  - `cores`: as 10 cores já resolvidas pela API (`primaria`, `secundaria`, `texto`, `textoSuave`, `fundoCartao`, `fundoPagina`, `neutra`, `sobreCor`, `fundoBanner`, `categoria`). `src/tema/aplicar-tema.ts` as copia **exatas** para variáveis CSS (`--cor-*`); não há ajuste de contraste. O `:root` de `global.css` tem os padrões para o primeiro quadro.
+  - `banner`: `null` → cabeçalho; objeto → `Banner` no lugar do cabeçalho (logo/nome opcionais e, abaixo, foto 16:9 **ou** descrição). A API manda `null` quando o banner está desligado ou o panfleto está em exibição.
+  - `exibirNomeCategoria`: `false` → `GradeProdutos` (grade única, 2 colunas até 420 px) sem título, contador nem barra.
+  - Resposta sem `aparencia` (API antiga) cai em "Não foi possível carregar as ofertas".
 - **PDF:** `pdfjs-dist` e o worker ficam em chunks separados, baixados só quando o panfleto é PDF. Só a página 1 é desenhada num `<canvas>`, sem camada de texto, anotações ou formulários. Há sempre o link "Abrir PDF".
 - **Zoom:** pinça nativa do navegador (o `viewport` não limita a escala).
 
@@ -56,11 +60,11 @@ npm run test
 npm run test:cov
 ```
 
-Fixtures do contrato em `test/fixtures/` (página montada, panfleto imagem, panfleto PDF, página vazia). O pdf.js é mockado nos testes (o jsdom não desenha canvas).
+Fixtures do contrato em `test/fixtures/` (página montada, panfleto imagem, panfleto PDF, página vazia, banner com foto, banner com descrição, sem nome de categoria). O pdf.js é mockado nos testes (o jsdom não desenha canvas).
 
 ## Deploy (Vercel)
 
-1. API com os marcos M1 e M2 em produção.
+1. API com os marcos M1 e M2 em produção. Para banner/grade/cores: a API com `aparencia` (M1 de `plano_pagina_publica_melhorias`) sobe **antes** desta página, e o painel (M4) depois.
 2. **CORS do bucket `midia` do Supabase** (D5): liberar `GET`/`HEAD` para o domínio da página e para `http://localhost:5173`. Sem isso o PDF não abre (o pdf.js baixa o arquivo via `fetch`). Conferir com
    `curl -I -H "Origin: https://<dominio>" <urlArquivo de um PDF>` (deve voltar `Access-Control-Allow-Origin`).
 3. Projeto novo na Vercel com *Root Directory* `tabloide-pagina-publica`, framework Vite, e as variáveis
