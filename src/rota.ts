@@ -9,3 +9,8 @@ export function extrairCodigo(pathname: string): string | null {
   if (codigo === undefined || !CODIGO_PUBLICO_REGEX.test(codigo)) return null;
   return codigo;
 }
+
+/** "/" (ou "") é a landing institucional do Tabloide Digital; o resto segue para a página da filial. */
+export function ehInicio(pathname: string): boolean {
+  return pathname === '/' || pathname === '';
+}

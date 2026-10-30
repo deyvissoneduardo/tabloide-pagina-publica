@@ -9,11 +9,13 @@ import { PaginaMontada } from './componentes/PaginaMontada';
 import { PanfletoImagem } from './componentes/PanfletoImagem';
 import { SemConexao } from './componentes/SemConexao';
 import { usePagina } from './hooks/use-pagina';
-import { extrairCodigo } from './rota';
+import { ehInicio, extrairCodigo } from './rota';
 import { aplicarTema } from './tema/aplicar-tema';
 
 /** pdf.js só é baixado quando o panfleto é PDF (orçamento do bundle inicial, R7/R8). */
 const PanfletoPdf = lazy(() => import('./componentes/PanfletoPdf'));
+/** A landing tem chunk e CSS próprios: não pesa no orçamento de quem abre o QR Code. */
+const Landing = lazy(() => import('./componentes/Landing'));
 
 function Pagina({ pagina }: { pagina: PaginaPublica }) {
   const { lojista, filial, panfleto, aparencia } = pagina;
@@ -59,7 +61,7 @@ function Pagina({ pagina }: { pagina: PaginaPublica }) {
   );
 }
 
-export default function App() {
+function PaginaFilial() {
   const codigo = extrairCodigo(window.location.pathname);
   const { estado, tentarDeNovo } = usePagina(codigo);
   switch (estado.tipo) {
@@ -72,4 +74,15 @@ export default function App() {
     case 'ok':
       return <Pagina pagina={estado.pagina} />;
   }
+}
+
+export default function App() {
+  if (ehInicio(window.location.pathname)) {
+    return (
+      <Suspense fallback={null}>
+        <Landing />
+      </Suspense>
+    );
+  }
+  return <PaginaFilial />;
 }

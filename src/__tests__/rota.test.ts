@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extrairCodigo } from '../rota';
+import { ehInicio, extrairCodigo } from '../rota';
 
 describe('Funcionalidade: Leitura do código da rota', () => {
   it('Cenário: Dado "/f/k7Qm2xPa", quando extraio, então "k7Qm2xPa"', () => {
@@ -23,6 +23,19 @@ describe('Funcionalidade: Leitura do código da rota', () => {
     'Cenário: Dado "%s", quando extraio, então null',
     (caminho) => {
       expect(extrairCodigo(caminho)).toBeNull();
+    },
+  );
+});
+
+describe('Funcionalidade: Rota da landing', () => {
+  it.each(['/', ''])('Cenário: Dado "%s", quando verifico, então é a landing', (caminho) => {
+    expect(ehInicio(caminho)).toBe(true);
+  });
+
+  it.each(['/f/k7Qm2xPa', '/x', '/index.html'])(
+    'Cenário: Dado "%s", quando verifico, então não é a landing',
+    (caminho) => {
+      expect(ehInicio(caminho)).toBe(false);
     },
   );
 });

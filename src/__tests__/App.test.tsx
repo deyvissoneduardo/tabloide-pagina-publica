@@ -24,6 +24,13 @@ describe('Funcionalidade: Estados da página', () => {
     expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true');
   });
 
+  it('Cenário: Dado "/", então a landing e nenhum fetch', async () => {
+    abrir('/');
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('no celular do cliente');
+    expect(screen.queryByText('Página não encontrada')).not.toBeInTheDocument();
+    expect(fetchFalso).not.toHaveBeenCalled();
+  });
+
   it('Cenário: Dado rota inválida, então "Página não encontrada" e nenhum fetch', () => {
     abrir('/x/k7Qm2xPa');
     expect(screen.getByRole('heading', { name: 'Página não encontrada' })).toBeInTheDocument();
