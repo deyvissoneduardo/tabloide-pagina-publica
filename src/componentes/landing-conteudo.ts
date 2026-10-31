@@ -1,7 +1,7 @@
 /** Textos e dados fictícios da landing institucional (rota "/"). */
 
 // TODO: trocar pelo WhatsApp comercial (só dígitos, com DDI 55 + DDD).
-export const WHATSAPP_NUMERO = '5500000000000';
+export const WHATSAPP_NUMERO = '5561983307535';
 
 export const WHATSAPP_MENSAGEM = 'Olá! Quero colocar as ofertas da minha loja no Tabloide Digital.';
 
