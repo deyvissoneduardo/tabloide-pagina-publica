@@ -4,7 +4,7 @@ Página que o consumidor abre ao ler o QR Code da filial: `https://<dominio>/f/<
 
 > ⚠️ Adicionar screenshot da página montada e do panfleto em `docs/demo.png` (e referenciar aqui).
 
-SPA estática (Vite + React + TypeScript), sem SSR, sem login, sem cookies e sem analytics. Plano completo em `../plano_pagina_publica/` (`plano.md` §4 é o contrato; `react.md` são as tarefas deste projeto) e, para banner, grade e cores, em `../docs/plano_pagina_publica_melhorias/` (`plano.md` §4.4–4.6).
+SPA estática (Vite + React + TypeScript), sem SSR, sem login, sem cookies e sem analytics. Os acessos são contados de forma agregada pela API, sem dado do consumidor. Plano completo em `../plano_pagina_publica/` (`plano.md` §4 é o contrato; `react.md` são as tarefas deste projeto) e, para banner, grade e cores, em `../docs/plano_pagina_publica_melhorias/` (`plano.md` §4.4–4.6).
 
 ## Como rodar
 
@@ -43,6 +43,7 @@ As variáveis são embutidas no build (são públicas: não coloque segredo aqui
 ## Como funciona
 
 - **Rota:** só `/f/:codigo` (`src/rota.ts`, mesmo regex da API). Qualquer outro caminho mostra "Página não encontrada" sem chamar a API.
+- **Acessos (RN50):** a API conta um acesso por `GET /publico/filiais/:codigo`, então cada carregamento faz **exatamente 1** chamada (+1 por "Tentar de novo"); sem refetch, polling ou prefetch. `/f/:codigo?origem=painel` (botão do painel) repassa `?origem=painel` à API para o acesso do lojista não contar e remove o parâmetro da barra de endereço (`src/origem.ts`). Recarregar depois disso conta normalmente.
 - **Estados:** carregando (esqueleto), `404` → "Página não encontrada" (inexistente e lojista não ativo respondem igual, RN35), `429`/`5xx`/rede/timeout de 10 s/JSON fora do formato → "Não foi possível carregar as ofertas" com "Tentar de novo".
 - **Exibição:** decide só por `panfleto != null`; a API já aplicou a regra `sePanfleto` (plano §4.8). A ordem de categorias e produtos é a do JSON (o cliente nunca reordena). A filial não aparece na página (só no título da aba).
 - **Aparência (`aparencia` na resposta):**

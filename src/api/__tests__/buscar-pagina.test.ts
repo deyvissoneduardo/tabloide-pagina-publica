@@ -81,6 +81,15 @@ describe('Funcionalidade: Busca da página pública', () => {
     );
   });
 
+  it('Cenário: Dado origem painel, então a URL termina em ?origem=painel (RN50)', async () => {
+    fetchFalso.mockResolvedValue(respostaJson(paginaEstrutura()));
+    await buscarPagina('k7Qm2xPa', undefined, 'painel');
+    expect(fetchFalso).toHaveBeenCalledWith(
+      `${import.meta.env.VITE_API_URL}/publico/filiais/k7Qm2xPa?origem=painel`,
+      expect.objectContaining({ headers: { Accept: 'application/json' } }),
+    );
+  });
+
   it('Cenário: Dado sinal externo abortado, então sem-conexao', async () => {
     const controle = new AbortController();
     fetchFalso.mockImplementation((_url: string, init: RequestInit) =>

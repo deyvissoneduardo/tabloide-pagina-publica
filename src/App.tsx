@@ -1,4 +1,4 @@
-import { lazy, Suspense, useLayoutEffect } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import type { PaginaPublica } from './api/tipos';
 import { AreaPanfleto } from './componentes/AreaPanfleto';
 import { Banner } from './componentes/Banner';
@@ -9,6 +9,7 @@ import { PaginaMontada } from './componentes/PaginaMontada';
 import { PanfletoImagem } from './componentes/PanfletoImagem';
 import { SemConexao } from './componentes/SemConexao';
 import { usePagina } from './hooks/use-pagina';
+import { extrairOrigem, limparOrigemDaUrl } from './origem';
 import { ehInicio, extrairCodigo } from './rota';
 import { aplicarTema } from './tema/aplicar-tema';
 
@@ -63,7 +64,10 @@ function Pagina({ pagina }: { pagina: PaginaPublica }) {
 
 function PaginaFilial() {
   const codigo = extrairCodigo(window.location.pathname);
-  const { estado, tentarDeNovo } = usePagina(codigo);
+  // Lida uma vez, antes do primeiro fetch: limpar a URL depois não muda o valor usado na busca.
+  const [origem] = useState(() => extrairOrigem(window.location.search));
+  const { estado, tentarDeNovo } = usePagina(codigo, origem);
+  useEffect(limparOrigemDaUrl, []);
   switch (estado.tipo) {
     case 'carregando':
       return <Esqueleto />;
