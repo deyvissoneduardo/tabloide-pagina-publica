@@ -27,7 +27,8 @@ Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre
 - NÃO reordenar, filtrar nem reaplicar a regra `sePanfleto` no cliente: a ordem de categorias/produtos é a do JSON e a exibição decide só por `panfleto != null`; o topo decide só por `aparencia.banner != null` (banner × cabeçalho).
 - A filial (nome/endereço) NÃO aparece no corpo da página (U9); `filial.nome` só no `document.title`.
 - NÃO importar `pdfjs-dist` fora do chunk lazy de `PanfletoPdf`; o build falha se ele entrar no bundle inicial.
-- NÃO usar analytics, cookies, `localStorage`/`sessionStorage`, nem colocar segredo em `VITE_*` (vai embutido no bundle).
+- NÃO usar analytics de terceiros, cookies, `localStorage`/`sessionStorage`, nem colocar segredo em `VITE_*` (vai embutido no bundle). A **contagem de acessos é feita na API** a cada `GET /publico/filiais/:codigo` (RN50): por isso cada carregamento faz **exatamente 1** chamada. NÃO adicionar refetch, polling, prefetch nem chamadas extras a esse endpoint.
+- `?origem=painel` (lojista abrindo pelo painel; o acesso não conta): lido uma vez em `src/origem.ts`, repassado à API como query string (header dispararia preflight) e limpo da barra de endereço com `replaceState`.
 - `fetch` só em `src/api/`; estados de erro seguem `ResultadoPagina` (`nao-encontrada` só para 404; o resto é `sem-conexao`).
 
 ## Onde coisas novas vão
@@ -45,6 +46,7 @@ Página pública do Tabloide Digital: o consumidor lê o QR Code da filial, abre
 ## Safe-Change Rules
 - NÃO mudar a rota `/f/:codigo` nem `CODIGO_PUBLICO_REGEX` (`src/rota.ts`): espelham a API e os QR Codes impressos.
 - `vercel.json` (rewrites, cache, CSP) e o orçamento em `scripts/verificar-bundle.mjs`: confirme antes de alterar.
+- Mudança no número de chamadas a `/publico/filiais/:codigo` por carregamento → confirme antes (afeta o painel de acessos do lojista; protegido em `src/__tests__/App.test.tsx`).
 
 <!-- Itere este arquivo: erro que estava neste contrato → fortaleça a regra existente;
      erro que NÃO estava → adicione uma regra nova. O arquivo cresce com o uso, não de uma vez. -->

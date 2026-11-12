@@ -1,3 +1,4 @@
+import type { Origem } from '../origem';
 import type { PaginaPublica } from './tipos';
 
 export type ResultadoPagina =
@@ -35,10 +36,17 @@ function combinarSinais(sinal: AbortSignal | undefined): AbortSignal {
  * 404 → nao-encontrada (RN35: inexistente e lojista não ativo respondem igual).
  * 429, 5xx, rede, tempo limite ou JSON fora do formato → sem-conexao.
  * ETag/304 e stale-while-revalidate ficam com o cache HTTP do navegador.
+ * Cada chamada conta um acesso na API (RN50); `origem: 'painel'` vai como query string
+ * (header customizado dispararia preflight de CORS).
  */
-export async function buscarPagina(codigo: string, sinal?: AbortSignal): Promise<ResultadoPagina> {
+export async function buscarPagina(
+  codigo: string,
+  sinal?: AbortSignal,
+  origem?: Origem,
+): Promise<ResultadoPagina> {
+  const consulta = origem ? `?origem=${origem}` : '';
   try {
-    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/publico/filiais/${codigo}`, {
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/publico/filiais/${codigo}${consulta}`, {
       signal: combinarSinais(sinal),
       headers: { Accept: 'application/json' },
     });
