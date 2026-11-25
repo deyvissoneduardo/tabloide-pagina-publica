@@ -14,3 +14,13 @@ export function extrairCodigo(pathname: string): string | null {
 export function ehInicio(pathname: string): boolean {
   return pathname === '/' || pathname === '';
 }
+
+/** "/privacidade" (com ou sem barra final) é a Política de Privacidade; não chama a API. */
+export function ehPrivacidade(pathname: string): boolean {
+  return pathname === '/privacidade' || pathname === '/privacidade/';
+}
+
+/** "/termos" (com ou sem barra final) são os Termos de Uso; não chama a API. */
+export function ehTermos(pathname: string): boolean {
+  return pathname === '/termos' || pathname === '/termos/';
+}

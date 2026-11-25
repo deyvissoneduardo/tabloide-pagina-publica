@@ -1,0 +1,202 @@
+/* Documentos legais (rotas "/privacidade" e "/termos"). Chunk próprio: não entra no orçamento de CSS
+   da página da filial. Mesma identidade da landing (AppCores.primaria #1565C0, secundaria #FFB300). */
+.dl {
+  --dl-azul: #1565c0;
+  --dl-ambar: #ffb300;
+  --dl-pendente: #fff3c4;
+  --dl-noite: #061632;
+  --dl-texto: #0f1b33;
+  --dl-suave: #50607a;
+  --dl-fundo: #f4f7fc;
+  --dl-branco: #ffffff;
+  --dl-borda: #e2e8f2;
+  --dl-gutter: 16px;
+
+  min-height: 100vh;
+  background: var(--dl-fundo);
+  color: var(--dl-texto);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+html:has(.dl) {
+  scroll-behavior: smooth;
+}
+
+.dl :focus-visible {
+  outline: 3px solid var(--dl-ambar);
+  outline-offset: 3px;
+}
+
+.dl a {
+  color: var(--dl-azul);
+}
+
+.dl-topo {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 56px;
+  padding: 0 var(--dl-gutter);
+  background: var(--dl-noite);
+}
+
+.dl .dl-topo a {
+  color: var(--dl-branco);
+  text-decoration: none;
+}
+
+.dl-topo__marca {
+  font-size: 1.1rem;
+}
+
+.dl-topo__marca b {
+  color: var(--dl-ambar);
+}
+
+.dl-topo__voltar {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.dl-conteudo {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px var(--dl-gutter) 48px;
+}
+
+.dl-conteudo h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.dl-atualizacao {
+  margin: 0 0 24px;
+  color: var(--dl-suave);
+  font-size: 0.9rem;
+}
+
+.dl-conteudo h2 {
+  margin: 0 0 12px;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.dl-conteudo h3 {
+  margin: 20px 0 8px;
+  font-size: 1.05rem;
+}
+
+.dl-conteudo ul,
+.dl-conteudo ol {
+  padding-left: 1.25rem;
+}
+
+.dl-conteudo li + li {
+  margin-top: 6px;
+}
+
+.dl-indice,
+.dl-secao {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--dl-borda);
+  border-radius: 16px;
+  background: var(--dl-branco);
+}
+
+.dl-secao {
+  scroll-margin-top: 72px;
+}
+
+.dl-secao > :last-child {
+  margin-bottom: 0;
+}
+
+.dl-indice ol {
+  margin: 0;
+}
+
+.dl-definicoes dt {
+  font-weight: 700;
+}
+
+.dl-definicoes dd {
+  margin: 0 0 12px;
+  color: var(--dl-suave);
+}
+
+.dl-tabela {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.dl-tabela table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.dl-tabela th,
+.dl-tabela td {
+  padding: 10px;
+  border-bottom: 1px solid var(--dl-borda);
+  text-align: left;
+  vertical-align: top;
+}
+
+.dl-tabela th {
+  background: var(--dl-fundo);
+}
+
+.dl-contato {
+  display: grid;
+  gap: 4px;
+  font-style: normal;
+}
+
+.dl-pendente {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--dl-pendente);
+  color: var(--dl-texto);
+  font-weight: 600;
+}
+
+.dl-rodape {
+  padding: 24px var(--dl-gutter);
+  background: var(--dl-noite);
+  color: rgb(255 255 255 / 0.6);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .dl-secao,
+  .dl-indice {
+    padding: 28px;
+  }
+}
+
+.dl-rodape nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  margin-bottom: 8px;
+}
+
+.dl .dl-rodape a {
+  color: var(--dl-branco);
+}

@@ -10,13 +10,16 @@ import { PanfletoImagem } from './componentes/PanfletoImagem';
 import { SemConexao } from './componentes/SemConexao';
 import { usePagina } from './hooks/use-pagina';
 import { extrairOrigem, limparOrigemDaUrl } from './origem';
-import { ehInicio, extrairCodigo } from './rota';
+import { ehInicio, ehPrivacidade, ehTermos, extrairCodigo } from './rota';
 import { aplicarTema } from './tema/aplicar-tema';
 
 /** pdf.js só é baixado quando o panfleto é PDF (orçamento do bundle inicial, R7/R8). */
 const PanfletoPdf = lazy(() => import('./componentes/PanfletoPdf'));
 /** A landing tem chunk e CSS próprios: não pesa no orçamento de quem abre o QR Code. */
 const Landing = lazy(() => import('./componentes/Landing'));
+/** Documentos legais (LGPD): chunks próprios, fora do orçamento da página da filial. */
+const Privacidade = lazy(() => import('./componentes/Privacidade'));
+const Termos = lazy(() => import('./componentes/Termos'));
 
 function Pagina({ pagina }: { pagina: PaginaPublica }) {
   const { lojista, filial, panfleto, aparencia } = pagina;
@@ -85,6 +88,20 @@ export default function App() {
     return (
       <Suspense fallback={null}>
         <Landing />
+      </Suspense>
+    );
+  }
+  if (ehPrivacidade(window.location.pathname)) {
+    return (
+      <Suspense fallback={null}>
+        <Privacidade />
+      </Suspense>
+    );
+  }
+  if (ehTermos(window.location.pathname)) {
+    return (
+      <Suspense fallback={null}>
+        <Termos />
       </Suspense>
     );
   }
