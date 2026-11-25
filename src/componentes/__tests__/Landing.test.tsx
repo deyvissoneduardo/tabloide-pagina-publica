@@ -47,6 +47,11 @@ describe('Funcionalidade: Landing institucional', () => {
     }
     expect(LINK_WHATSAPP).toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
     expect(document.title).toContain('Tabloide Digital');
+    expect(screen.getByRole('link', { name: 'Política de Privacidade' })).toHaveAttribute(
+      'href',
+      '/privacidade',
+    );
+    expect(screen.getByRole('link', { name: 'Termos de Uso' })).toHaveAttribute('href', '/termos');
   });
 
   it('Cenário: Dado sem IntersectionObserver, então tudo é revelado e os números já vêm no valor final', () => {

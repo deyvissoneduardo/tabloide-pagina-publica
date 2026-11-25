@@ -274,6 +274,14 @@ export default function Landing() {
           </span>
         </div>
         <p>Ofertas da sua loja, direto no celular do cliente.</p>
+        <nav className="lp-rodape__links" aria-label="Documentos">
+          <a className="lp-rodape__link" href="/termos">
+            Termos de Uso
+          </a>
+          <a className="lp-rodape__link" href="/privacidade">
+            Política de Privacidade
+          </a>
+        </nav>
         <small>© {new Date().getFullYear()} Tabloide Digital. Imagens meramente ilustrativas.</small>
       </footer>
 

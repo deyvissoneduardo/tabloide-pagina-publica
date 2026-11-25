@@ -31,6 +31,20 @@ describe('Funcionalidade: Estados da página', () => {
     expect(fetchFalso).not.toHaveBeenCalled();
   });
 
+  it('Cenário: Dado "/privacidade", então a Política de Privacidade e nenhum fetch (RN50)', async () => {
+    abrir('/privacidade');
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Política de Privacidade' }),
+    ).toBeInTheDocument();
+    expect(fetchFalso).not.toHaveBeenCalled();
+  });
+
+  it('Cenário: Dado "/termos", então os Termos de Uso e nenhum fetch (RN50)', async () => {
+    abrir('/termos');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Termos de Uso' })).toBeInTheDocument();
+    expect(fetchFalso).not.toHaveBeenCalled();
+  });
+
   it('Cenário: Dado rota inválida, então "Página não encontrada" e nenhum fetch', () => {
     abrir('/x/k7Qm2xPa');
     expect(screen.getByRole('heading', { name: 'Página não encontrada' })).toBeInTheDocument();

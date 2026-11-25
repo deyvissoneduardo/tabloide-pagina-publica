@@ -1791,6 +1791,19 @@ html:has(.lp) {
   color: var(--lp-branco);
 }
 
+.lp-rodape__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+}
+
+.lp .lp-rodape__link {
+  color: var(--lp-branco);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .lp-rodape small {
   color: rgb(255 255 255 / 0.45);
 }
